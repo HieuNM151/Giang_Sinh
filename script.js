@@ -1,51 +1,85 @@
-  "object" != typeof window.CP && (window.CP = {}),
-  (window.CP.PenTimer = {
-    programNoLongerBeingMonitored: !1,
-    timeOfFirstCallToShouldStopLoop: 0,
-    _loopExits: {},
-    _loopTimers: {},
-    START_MONITORING_AFTER: 2e3,
-    STOP_ALL_MONITORING_TIMEOUT: 5e3,
-    MAX_TIME_IN_LOOP_WO_EXIT: 2200,
-    exitedLoop: function (E) {
-      this._loopExits[E] = !0;
-    },
-    shouldStopLoop: function (E) {
-      if (this.programKilledSoStopMonitoring) return !0;
-      if (this.programNoLongerBeingMonitored) return !1;
-      if (this._loopExits[E]) return !1;
-      var _ = this._getTime();
-      if (0 === this.timeOfFirstCallToShouldStopLoop)
-        return (this.timeOfFirstCallToShouldStopLoop = _), !1;
-      var o = _ - this.timeOfFirstCallToShouldStopLoop;
-      if (o < this.START_MONITORING_AFTER) return !1;
-      if (o > this.STOP_ALL_MONITORING_TIMEOUT)
-        return (this.programNoLongerBeingMonitored = !0), !1;
-      try {
-        this._checkOnInfiniteLoop(E, _);
-      } catch {
-        return (
-          this._sendErrorMessageToEditor(),
-          (this.programKilledSoStopMonitoring = !0),
-          !0
-        );
-      }
-      return !1;
-    },
+const showButton = document.getElementById("showButton");
+const christmasMessage = document.getElementById("as");
 
-    _checkOnInfiniteLoop: function (E, _) {
-      if (!this._loopTimers[E]) return (this._loopTimers[E] = _), !1;
-      if (_ - this._loopTimers[E] > this.MAX_TIME_IN_LOOP_WO_EXIT)
-        throw "Infinite Loop found on loop: " + E;
-    },
-    _getTime: function () {
-      return Date.now();
-    },
-  }),
-  (window.CP.shouldStopExecution = function (E) {
-    var _ = window.CP.PenTimer.shouldStopLoop(E);
-    return 
-  }),
-  (window.CP.exitedLoop = function (E) {
-    window.CP.PenTimer.exitedLoop(E);
+showButton.addEventListener("click", function () {
+  if (christmasMessage.style.display === "none") {
+    christmasMessage.style.display = "block";
+  } else {
+    christmasMessage.style.display = "none";
+  }
+});
+document.getElementById("closeButton").addEventListener("click", function () {
+  document.getElementById("as").style.display = "block";
+});
+
+document.getElementById("showButton").addEventListener("click", function () {
+  var guideInfo = document.getElementById("guideInfo");
+  var button = document.getElementById("showButton");
+
+  button.classList.add("hidden");
+
+  guideInfo.classList.remove("hidden");
+  guideInfo.classList.add("show");
+});
+
+document.getElementById("showButton").addEventListener("click", function () {
+  var guideInfo = document.getElementById("guideInfo");
+  var button = document.getElementById("showButton");
+
+  button.classList.add("hidden");
+
+  guideInfo.classList.remove("hidden");
+  guideInfo.classList.add("show");
+});
+
+document.getElementById("closeButton").addEventListener("click", function () {
+  var guideInfo = document.getElementById("guideInfo");
+  var button = document.getElementById("showButton");
+
+  guideInfo.classList.remove("show");
+  setTimeout(function () {
+    guideInfo.classList.add("hidden");
+    button.classList.remove("hidden");
+  }, 500);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var encodedText = '&#68;&#101;&#115;&#105;&#103;&#110;&#32;&#98;&#121;&#32;&#80;&#97;&#110;&#98;&#97;&#112;';
+  var footer = document.createElement("a");
+  footer.innerHTML = encodedText;
+  document.body.appendChild(footer); 
+});
+const treeIcon = document.querySelector(".tree-icon");
+
+treeIcon.addEventListener("mouseenter", function () {
+  treeIcon.classList.add("shake-animation");
+
+  treeIcon.addEventListener("animationend", function () {
+    treeIcon.classList.remove("shake-animation");
   });
+});
+
+function createSnowflakes() {
+  const snowflakesContainer = document.createElement("div");
+  snowflakesContainer.classList.add("snowflakes");
+  document.body.appendChild(snowflakesContainer);
+
+  for (let i = 0; i < 50; i++) {
+    const snowflake = document.createElement("div");
+    snowflake.classList.add("snowflake");
+
+
+    const size = Math.random() * 10 + 5;
+    snowflake.style.width = `${size}px`;
+    snowflake.style.height = `${size}px`;
+    snowflake.style.left = `${Math.random() * 100}vw`;
+    snowflake.style.animationDuration = `${Math.random() * 2 + 3}s`;
+    snowflake.style.animationDelay = `${Math.random() * 20}s`;
+    snowflake.style.setProperty("--random-x", Math.random());
+
+    snowflakesContainer.appendChild(snowflake);
+  }
+}
+
+window.onload = createSnowflakes;
+
